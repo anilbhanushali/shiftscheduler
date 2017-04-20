@@ -10,11 +10,11 @@ export class HomePage {
 
   TIMEZONE = 'Asia/Kolkata';
   DATEFORMAT = 'ddd,hh:mm A';
-  
+
   staff1 = 'John';
   staff2 = 'Albert';
   startDate = new Date().toISOString();
-
+  staff = [];
   shifts: any[] = [];
   days: any[] = [];
   /*[{
@@ -22,13 +22,18 @@ export class HomePage {
     shifts:[{from:'07:00 AM',to:'07:00 PM',staff:'Vimal'},{from:'07:00 PM',to:'07:00 AM',staff:'Anil'}]
   }]*/
 
-  staff = [{
-    name: this.staff1,
-    shifts: []
-  }, {
-    name: this.staff2,
-    shifts: []
-  }];
+  initVariables() {
+    this.staff = [{
+      name: this.staff1,
+      shifts: []
+    }, {
+      name: this.staff2,
+      shifts: []
+    }];
+    this.days = [];
+    this.shifts = [];
+  }
+
 
   shiftDef = [{
     from: '07:00 AM',
@@ -99,14 +104,14 @@ export class HomePage {
     }
   }
 
-  createSchedule3(startDate,staff1,staff2) {
-    
+  createSchedule3(startDate, staff1, staff2) {
+    this.initVariables();
     let staffIndex = 0;
     let runningDate = new moment(startDate).tz(this.TIMEZONE);
-    for (var index = 0; index < 30; index++) {      
+    for (var index = 0; index < 30; index++) {
       this.days.push({
-        day:new moment(runningDate).startOf('day'),
-        shifts:[]
+        day: new moment(runningDate).startOf('day'),
+        shifts: []
       });
       this.shiftDef.forEach(shiftDef => {
         let shiftStart = new moment(runningDate.format('DD-MM-YY ') + shiftDef.from, 'DD-MM-YY hh:mm A');

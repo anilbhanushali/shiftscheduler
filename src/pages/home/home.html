@@ -18,7 +18,7 @@
     <ion-input [(ngModel)]="staff2"></ion-input>
   </ion-item>
   <p>
-    <button ion-button (click)="createSchedule3(startDate,staff1,staff2)">Create</button>
+    <button ion-button full (click)="createSchedule3(startDate,staff1,staff2)">Create</button>
   </p>
   <ion-grid>
     <ion-row>
@@ -31,7 +31,7 @@
     </ion-row>
     <ion-row *ngFor="let day of days">
       <ion-col>
-        {{day.day | date: 'EEE'}}
+        {{day.day | date: 'dd-MM-yy, EEE'}}
       </ion-col>
       <ion-col *ngFor="let shift of day.shifts">
         {{shift.staff}}
