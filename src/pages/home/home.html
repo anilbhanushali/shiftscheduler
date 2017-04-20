@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Create Schedule</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label>Start Date</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="startDate"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>Staff 1</ion-label>
+    <ion-input displayFormat="DD/MM/YYYY" [(ngModel)]="staff1"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Staff 2</ion-label>
+    <ion-input [(ngModel)]="staff2"></ion-input>
+  </ion-item>
+  <p>
+    <button ion-button (click)="createSchedule3(startDate,staff1,staff2)">Create</button>
+  </p>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        Day
+      </ion-col>
+      <ion-col *ngFor="let shift of shiftDef">
+        {{shift.from}} to {{shift.to}}
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let day of days">
+      <ion-col>
+        {{day.day | date: 'EEE'}}
+      </ion-col>
+      <ion-col *ngFor="let shift of day.shifts">
+        {{shift.staff}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
