@@ -21,20 +21,22 @@
     <button ion-button full (click)="createSchedule3(startDate,staff1,staff2)">Create</button>
   </p>
   <ion-grid>
-    <ion-row>
+    <!--<ion-row>
       <ion-col>
         Day
       </ion-col>
       <ion-col *ngFor="let shift of shiftDef">
         {{shift.from}} to {{shift.to}}
       </ion-col>
-    </ion-row>
+    </ion-row>-->
     <ion-row *ngFor="let day of days">
       <ion-col>
         {{day.day | date: 'dd-MM-yy, EEE'}}
       </ion-col>
       <ion-col *ngFor="let shift of day.shifts">
-        {{shift.staff}}
+        {{shift.staff}} [
+        <strong> {{shift.from | date:'dd, hh:mm a'}} - {{shift.to | date:'dd, hh:mm a'}} </strong>
+        ]
       </ion-col>
     </ion-row>
   </ion-grid>

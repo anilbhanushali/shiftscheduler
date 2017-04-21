@@ -38,15 +38,21 @@ export class HomePage {
   shiftDef = [{
     from: '07:00 AM',
     to: '07:00 PM',
-    hours: 12,
+    hours: {
+      Default: 12
+    },
     switchDay: '',
     switch: false
   }, {
     from: '07:00 PM',
     to: '07:00 AM',
-    hours: 12,
+    hours: {
+      Saturday: 24,
+      Sunday: 24,
+      Default: 12
+    },
     switchDay: 'Saturday',
-    switch: true
+    switch: false
   }];
 
   constructor(public navCtrl: NavController) {
@@ -108,25 +114,40 @@ export class HomePage {
     this.initVariables();
     let staffIndex = 0;
     let runningDate = new moment(startDate).tz(this.TIMEZONE);
+
+    if (!this.days.length) {
+      runningDate = new moment(runningDate.format('DD-MM-YY ') + this.shiftDef[0].from, 'DD-MM-YY hh:mm A');
+    }
+
     for (var index = 0; index < 30; index++) {
       this.days.push({
         day: new moment(runningDate).startOf('day'),
         shifts: []
       });
-      this.shiftDef.forEach(shiftDef => {
-        let shiftStart = new moment(runningDate.format('DD-MM-YY ') + shiftDef.from, 'DD-MM-YY hh:mm A');
-        this.days[index].shifts.push({
-          from: new moment(shiftStart),
-          to: new moment(shiftStart.add(shiftDef.hours, 'hours')),
+      for (let shiftDef of this.shiftDef) {
+        
+        if (shiftDef.from != runningDate.format('hh:mm A')) {
+          continue;
+        }
+
+        let shift: any = {
           staff: this.staff[staffIndex].name
-        });
+        };
+        let shiftStart = new moment(runningDate);
+        shift.from = new moment(shiftStart);
+        let shiftStartDay = shiftStart.format('dddd');
+        let shiftHours = shiftDef.hours[shiftStartDay] || shiftDef.hours.Default;
+        let shiftEnd = new moment(shiftStart.add(shiftHours, 'hours'));
+        shift.to = new moment(shiftEnd);
+        this.days[index].shifts.push(shift);
+        runningDate = new moment(shiftEnd);
+        console.log(runningDate.format('dddd, hh:mm A'))
         if (runningDate.format('dddd') === shiftDef.switchDay && shiftDef.switch) {
           //continue with same staff;
         } else {
           staffIndex = (staffIndex == 0) ? 1 : 0;
         }
-      })
-      runningDate.add(1, 'day');
+      }
     }
   }
 }
